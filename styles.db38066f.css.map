@@ -1,0 +1,1 @@
+{"version":3,"sources":["styles.css"],"names":[],"mappings":"AAAA,aACE,WACF,CACA,KACE,wBACF","file":"styles.db38066f.css","sourceRoot":"../src","sourcesContent":[".input-field {\n  margin: 50px;\n}\nbody {\n  background-color: rgb(99, 48, 48);\n}\n"]}
