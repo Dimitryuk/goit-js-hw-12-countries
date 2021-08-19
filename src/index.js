@@ -2,8 +2,8 @@ import fetchCountries from "./fetchCountries";
 import refs from "./refs";
 import template from './templates/template.hbs'
 import { debounce } from "debounce";
-import {  defaultModules,error} from '@pnotify/core';
-import * as PNotifyDesktop from '@pnotify/desktop/dist/PNotifyDesktop';
+import { alert, info, success, error } from '../node_modules/@pnotify/core/dist/PNotify.js';
+
 
 import "@pnotify/core/dist/PNotify.css" 
 import "@pnotify/desktop/dist/PNotifyDesktop" ;
@@ -14,10 +14,51 @@ import '@pnotify/core/dist/BrightTheme.css';
 //   text: "I'm an error message."
 // });
 
+
+
 refs.input.addEventListener('input', debounce(onInputChange, 500))
 
-const onInputChange = function (event) {
-    event.preventDefault
-    const inputValue = event.target.value
-    console.log(inputValue);
+function onInputChange() {
+    refs.countriesList.innerHTML = "";
+    const inputValue = refs.input.value
+    if (inputValue) {
+        fetchCountries(inputValue.trim()).then((data) => createMarkup(data))
+        .catch((error)=> console.log('error'))
+    }
+
+}
+function createMarkup(data) {
+    const markup = template(data)
+    if (!data.length) {
+        error({
+      text: `Please enter a more specific query!`,
+      styling: "brighttheme",
+      delay: 1500,
+    });
+    return;
+        
+    }
+    if (data && data.length >= 5) {
+    error({
+      title: `Too many matches found.`,
+      text: `We found ${data.length} countries. Please enter a more specific query!`,
+      styling: "brighttheme",
+      delay: 1500,
+    });
+    return (refs.countriesList.innerHTML = `<li>${country.name}</li>`);
+  }
+  if (data.length <= 10) {
+    refs.countriesList.insertAdjacentHTML("beforeend", markup);
+  }
+  if (data.length > 10) {
+    error({
+      text: `Please enter a more specific query !`,
+      styling: "brighttheme",
+      delay: 1500,
+    });
+  }
+  if (data.length === 1) {
+    refs.countriesList.innerHTML = "";
+    refs.countriesList.insertAdjacentHTML("beforeend", markup);
+  }
 }
