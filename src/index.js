@@ -29,9 +29,9 @@ function onInputChange() {
 }
 function createMarkup(data) {
     const markup = template(data)
-    if (!data.length) {
+    if (data.status===404) {
         error({
-      text: `Please enter a more specific query!`,
+      text: `No country has been found. Please enter a more specific query!`,
       styling: "brighttheme",
       delay: 1500,
     });
@@ -48,7 +48,7 @@ function createMarkup(data) {
     return (refs.countriesList.innerHTML = `<li>${country.name}</li>`);
   }
   if (data.length <= 10) {
-    refs.countriesList.insertAdjacentHTML("beforeend", markup);
+    refs.country-item.insertAdjacentHTML("beforeend", markup);
   }
   if (data.length > 10) {
     error({
